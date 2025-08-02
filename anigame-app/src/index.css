@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Cyberpunk AniGame Theme */
+    --background: 270 15% 5%;
+    --foreground: 0 0% 98%;
+
+    --card: 270 15% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 270 15% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 320 100% 50%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 190 100% 50%;
+    --secondary-foreground: 270 15% 5%;
+
+    --muted: 270 15% 15%;
+    --muted-foreground: 0 0% 70%;
+
+    --accent: 290 100% 70%;
+    --accent-foreground: 270 15% 5%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 270 15% 20%;
+    --input: 270 15% 15%;
+    --ring: 320 100% 50%;
+
+    /* Custom AniGame colors */
+    --neon-pink: 320 100% 50%;
+    --neon-cyan: 190 100% 50%;
+    --dark-purple: 270 15% 5%;
+    --purple-light: 270 15% 15%;
+    
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(var(--neon-pink)) 0%, hsl(var(--neon-cyan)) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--purple-light)) 100%);
+    
+    /* Shadows */
+    --shadow-neon: 0 0 20px hsl(var(--neon-pink) / 0.5);
+    --shadow-cyan: 0 0 20px hsl(var(--neon-cyan) / 0.5);
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Keep same cyberpunk theme for dark mode */
+    --background: 270 15% 3%;
+    --foreground: 0 0% 98%;
+
+    --card: 270 15% 6%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 270 15% 6%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 320 100% 60%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 190 100% 60%;
+    --secondary-foreground: 270 15% 3%;
+
+    --muted: 270 15% 12%;
+    --muted-foreground: 0 0% 75%;
+
+    --accent: 290 100% 75%;
+    --accent-foreground: 270 15% 3%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 270 15% 18%;
+    --input: 270 15% 12%;
+    --ring: 320 100% 60%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pg
+    username: postgres
+    password: postgres
+
+  sql:
+    init:
+      mode: always
+
+  #jpa:
+    #hibernate:
+    #  ddl-auto: create-drop
+    #  ddl-auto: update
+    #show-sql: true
+    #defer-datasource-initialization: true
+    #properties:
+    #  hibernate:
+    #    format_sql: true
+jwt:
+  public:
+    key: classpath:app.pub
+  private:
+    key: classpath:app.key
+expire-times:
+  access-token: 3600
+  refresh-token: 28800

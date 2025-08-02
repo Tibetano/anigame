@@ -1,0 +1,18 @@
+
+### Anigame api ###
+anigame-api/HELP.md
+anigame-api/target/
+anigame-api/.mvn/wrapper/maven-wrapper.jar
+anigame-api/!**/src/main/**/target/
+anigame-api/!**/src/test/**/target/
+
+### IntelliJ IDEA ###
+anigame-api/.idea
+anigame-api/*.iws
+anigame-api/*.iml
+anigame-api/*.ipr
+
+
+### Anigame App ###
+anigame-app/node_modules/
+anigame-app/dist/
