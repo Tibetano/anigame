@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
@@ -47,5 +48,11 @@ public class AuthController {
                 .buildAndExpand(newUser.id())
                 .toUri();
         return ResponseEntity.created(location).body(newUser);
+    }
+
+    @PostMapping("/verify-email")
+    public ResponseEntity<?> verifyEmail (@RequestParam(value = "token") String validationToken) {
+        authService.validateAccount(UUID.fromString(validationToken));
+        return ResponseEntity.ok("User confirmed successfully.");
     }
 }

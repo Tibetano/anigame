@@ -1,10 +1,10 @@
 package com.anigame.api.service;
 
-import com.anigame.api.dto.UserResDTO;
-import com.anigame.api.persistence.entity.UserEntity;
 import com.anigame.api.dto.UserCredentialsReqDTO;
 import com.anigame.api.dto.UserCredentialsResDTO;
 import com.anigame.api.dto.UserReqDTO;
+import com.anigame.api.dto.UserResDTO;
+import com.anigame.api.persistence.entity.UserEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -68,5 +68,9 @@ public class AuthService {
 
     public UserResDTO register (UserReqDTO userReqDTO) {
         return userService.create(userReqDTO);
+    }
+
+    public void validateAccount (UUID token) {
+        userService.confirmUser(token);
     }
 }

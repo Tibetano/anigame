@@ -114,4 +114,14 @@ public class UserService {
         return user;
     }
 
+    public void confirmUser (UUID token) {
+        var user = userRepository.findByValidationToken(token)
+                .orElseThrow(() -> new RuntimeException("User not found."));
+        if (Instant.now().isAfter(user.getValidationTokenExpirationDate())) {
+            throw new RuntimeException("Expired validation token expiration date.");
+        }
+        user.setStatus(UserStatus.CONFIRMED);
+        userRepository.save(user);
+    }
+
 }
