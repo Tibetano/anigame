@@ -1,6 +1,6 @@
 package com.anigame.api.persistence.entity.enumerate;
 
-public enum Gender {
+public enum UserGender {
     MALE,
     FEMALE,
     NON_BINARY

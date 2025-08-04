@@ -3,8 +3,9 @@ package com.anigame.api.service;
 import com.anigame.api.dto.UserReqDTO;
 import com.anigame.api.dto.UserResDTO;
 import com.anigame.api.persistence.entity.UserEntity;
-import com.anigame.api.persistence.entity.enumerate.Gender;
+import com.anigame.api.persistence.entity.enumerate.UserGender;
 import com.anigame.api.persistence.entity.RoleEntity;
+import com.anigame.api.persistence.entity.enumerate.UserStatus;
 import com.anigame.api.persistence.repository.RoleRepository;
 import com.anigame.api.persistence.repository.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 import java.util.UUID;
 
@@ -44,8 +47,15 @@ public class UserService {
                 .lastName(userReqDTO.lastName())
                 .cpf(userReqDTO.cpf())
                 .email(userReqDTO.email())
-                .gender(Gender.valueOf(userReqDTO.gender()))
+                .gender(UserGender.valueOf(userReqDTO.gender()))
                 .dateOfBirth(userReqDTO.dateOfBirth())
+
+                .status(UserStatus.PENDING)
+                .validationToken(UUID.randomUUID())
+                .validationTokenExpirationDate(Instant.now().plus(24, ChronoUnit.HOURS))
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+
                 .roles(Set.of(userRole.get()))
                 .build();
         var savedUser = userRepository.save(newUser);
@@ -58,7 +68,9 @@ public class UserService {
                 savedUser.getCpf(),
                 savedUser.getEmail(),
                 savedUser.getGender(),
-                savedUser.getDateOfBirth()
+                savedUser.getDateOfBirth(),
+                savedUser.getStatus(),
+                savedUser.getCreatedAt()
         );
     }
 

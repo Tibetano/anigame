@@ -1,12 +1,14 @@
 package com.anigame.api.persistence.entity;
 
-import com.anigame.api.persistence.entity.enumerate.Gender;
+import com.anigame.api.persistence.entity.enumerate.UserGender;
+import com.anigame.api.persistence.entity.enumerate.UserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
@@ -37,9 +39,21 @@ public class UserEntity {
     private String email;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private UserGender gender;
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status;
+    @Column(unique = true, nullable = false)
+    private UUID validationToken;
+    @Column(nullable = false)
+    private Instant validationTokenExpirationDate;
+    @Column(nullable = false)
+    private Instant createdAt;
+    @Column(nullable = false)
+    private Instant updatedAt;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -48,4 +62,5 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id")//aqui é o nome da coluna que vai entrar a chave da role.
     )
     private Set<RoleEntity> roles;
+
 }

@@ -1,7 +1,9 @@
 package com.anigame.api.dto;
 
-import com.anigame.api.persistence.entity.enumerate.Gender;
+import com.anigame.api.persistence.entity.enumerate.UserGender;
+import com.anigame.api.persistence.entity.enumerate.UserStatus;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -12,7 +14,9 @@ public record UserResDTO(
         String lastName,
         String cpf,
         String email,
-        Gender gender,
-        LocalDate dateOfBirth
+        UserGender gender,
+        LocalDate dateOfBirth,
+        UserStatus status,
+        Instant createdAt
 ) {
 }
