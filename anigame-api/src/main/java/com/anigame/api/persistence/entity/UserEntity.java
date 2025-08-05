@@ -35,7 +35,7 @@ public class UserEntity {
     private String lastName;
     @Column(unique = true)
     private String cpf;
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
