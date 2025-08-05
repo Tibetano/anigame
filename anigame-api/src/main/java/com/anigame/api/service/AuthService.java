@@ -67,10 +67,16 @@ public class AuthService {
     }
 
     public UserResDTO register (UserReqDTO userReqDTO) {
+        //O 'userService.create' deve retornar o token e a chamada para o envio do email de confirmação deve ficar aqui.
         return userService.create(userReqDTO);
     }
 
     public void validateAccount (UUID token) {
         userService.confirmUser(token);
+    }
+
+    public void resendVerificationToken (String email) {
+        userService.refreshValidatioToken(email);
+        //aqui deve vir a chamada do serviço de envio de email para enviar o novo token
     }
 }

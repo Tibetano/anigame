@@ -1,6 +1,7 @@
 package com.anigame.api.controller;
 
 import com.anigame.api.dto.RefreshTokenReqDTO;
+import com.anigame.api.dto.ResendVerificationReqDTO;
 import com.anigame.api.dto.UserCredentialsReqDTO;
 import com.anigame.api.dto.UserReqDTO;
 import com.anigame.api.service.AuthService;
@@ -55,4 +56,11 @@ public class AuthController {
         authService.validateAccount(UUID.fromString(validationToken));
         return ResponseEntity.ok("User confirmed successfully.");
     }
+
+    @PostMapping("/resend-verification")
+    public ResponseEntity<?> resendVerification (@RequestBody ResendVerificationReqDTO req) {
+        authService.resendVerificationToken(req.email());
+        return ResponseEntity.ok("New validation link sent successfully.");
+    }
+
 }

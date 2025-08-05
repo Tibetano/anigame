@@ -124,4 +124,12 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void refreshValidatioToken (String email) {
+        var user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found."));
+        user.setValidationToken(UUID.randomUUID());
+        user.setValidationTokenExpirationDate(Instant.now().plus(24, ChronoUnit.HOURS));
+        userRepository.save(user);
+    }
+
 }
