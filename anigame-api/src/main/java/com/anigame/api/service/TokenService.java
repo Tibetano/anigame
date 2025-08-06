@@ -80,7 +80,6 @@ public class TokenService {
     }
 
     public String revokeRefreshToken(String refreshToken){
-        System.out.println("Chegei aqui pae!!!!!!!!!!!");
         var validatedToken = validateRefreshToken(refreshToken);
         refreshTokenRepository.deleteById(validatedToken.getId());
         return "RefreshToken revoked successfully!";
