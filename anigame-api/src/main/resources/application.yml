@@ -2,6 +2,18 @@ server:
   port: 8080
 
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: lucas.tibetano@gmail.com
+    password: lrpcalbooydpshul
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
   datasource:
     url: jdbc:postgresql://localhost:5432/pg
     username: postgres
@@ -20,6 +32,11 @@ spring:
     #properties:
     #  hibernate:
     #    format_sql: true
+app:
+  url: http://localhost
+  port: 8085
+  verify-endpoint: /auth/verify-email
+
 jwt:
   public:
     key: classpath:app.pub

@@ -37,7 +37,7 @@ public class UserService {
         var encodedPassword = bCryptPasswordEncoder.encode(userReqDTO.password());
 
         if (userRole.isEmpty()) {
-            throw new RuntimeException("Role not found.");
+            throw new RuntimeException("User role not found.");
         }
 
         var newUser = UserEntity.builder()
@@ -70,12 +70,14 @@ public class UserService {
                 savedUser.getGender(),
                 savedUser.getDateOfBirth(),
                 savedUser.getStatus(),
+                savedUser.getValidationToken(),
                 savedUser.getCreatedAt()
         );
     }
 
     public ResponseEntity<?> get (UUID id) {
-        var user = userRepository.findById(id);
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found."));
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
@@ -117,19 +119,26 @@ public class UserService {
     public void confirmUser (UUID token) {
         var user = userRepository.findByValidationToken(token)
                 .orElseThrow(() -> new RuntimeException("User not found."));
-        if (Instant.now().isAfter(user.getValidationTokenExpirationDate())) {
+        if (user.getStatus().equals(UserStatus.CONFIRMED)) {
+            throw new RuntimeException("User already verificated.");
+        } else if (Instant.now().isAfter(user.getValidationTokenExpirationDate())) {
             throw new RuntimeException("Expired validation token expiration date.");
         }
         user.setStatus(UserStatus.CONFIRMED);
         userRepository.save(user);
     }
 
-    public void refreshValidatioToken (String email) {
+    public UserEntity refreshValidationToken (String email) {
         var user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found."));
+        if (user.getStatus().equals(UserStatus.CONFIRMED)) {
+            throw new RuntimeException("User already verificated.");
+        } else if (Instant.now().isBefore(user.getValidationTokenExpirationDate())){
+            return user;
+        }
         user.setValidationToken(UUID.randomUUID());
         user.setValidationTokenExpirationDate(Instant.now().plus(24, ChronoUnit.HOURS));
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
 }

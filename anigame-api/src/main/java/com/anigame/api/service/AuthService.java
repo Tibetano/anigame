@@ -23,12 +23,21 @@ public class AuthService {
     @Value("${expire-times.refresh-token}")
     private Long refreshTokenExpiresTime;
 
+    @Value("${app.url}")
+    private String appURL;
+    @Value("${app.port}")
+    private String appPORT;
+    @Value("${app.verify-endpoint}")
+    private String appENDPOINT;
+
     private final UserService userService;
+    private final EmailService mailService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final TokenService tokenService;
 
-    public AuthService(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, TokenService tokenService) {
+    public AuthService(UserService userService, EmailService mailService, BCryptPasswordEncoder bCryptPasswordEncoder, TokenService tokenService) {
         this.userService = userService;
+        this.mailService = mailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.tokenService = tokenService;
     }
@@ -67,8 +76,11 @@ public class AuthService {
     }
 
     public UserResDTO register (UserReqDTO userReqDTO) {
-        //O 'userService.create' deve retornar o token e a chamada para o envio do email de confirmação deve ficar aqui.
-        return userService.create(userReqDTO);
+        var user = userService.create(userReqDTO);
+        String message = "Usuário(a) criado(a) com sucesso! As contas devem ser verificadas. Para verificar sua conta acesso o link: " +
+                appURL + ":" + appPORT + appENDPOINT + "?token=" + user.validationToken().toString();
+        mailService.sendTextEmail(user.email(),"abertura de conta", message);
+        return user;
     }
 
     public void validateAccount (UUID token) {
@@ -76,7 +88,9 @@ public class AuthService {
     }
 
     public void resendVerificationToken (String email) {
-        userService.refreshValidatioToken(email);
-        //aqui deve vir a chamada do serviço de envio de email para enviar o novo token
+        var user = userService.refreshValidationToken(email);
+        String message = "Olá! Segue o novo link para verificação da sua conta: " +
+                appURL + ":" + appPORT + appENDPOINT + "?token=" + user.getValidationToken().toString();
+        mailService.sendTextEmail(user.getEmail(),"abertura de conta", message);
     }
 }

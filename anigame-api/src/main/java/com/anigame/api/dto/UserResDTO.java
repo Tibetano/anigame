@@ -17,6 +17,7 @@ public record UserResDTO(
         UserGender gender,
         LocalDate dateOfBirth,
         UserStatus status,
+        UUID validationToken,
         Instant createdAt
 ) {
 }
