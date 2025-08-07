@@ -51,9 +51,9 @@ public class AuthController {
         return ResponseEntity.created(location).body(newUser);
     }
 
-    @PostMapping("/verify-email")
-    public ResponseEntity<?> verifyEmail (@RequestParam(value = "token") String validationToken) {
-        authService.validateAccount(UUID.fromString(validationToken));
+    @PostMapping("/verify-user")
+    public ResponseEntity<?> verifyUser (@RequestParam(value = "token") String validationToken) {
+        authService.verifyUser(UUID.fromString(validationToken));
         return ResponseEntity.ok("User verified successfully.");
     }
 

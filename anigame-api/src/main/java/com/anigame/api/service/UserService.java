@@ -99,7 +99,7 @@ public class UserService {
 
     public ResponseEntity<?> delete (UUID id) {
         userRepository.deleteById(id);
-        return ResponseEntity.ok("User deleted.");
+        return ResponseEntity.ok("User deleted successfully.");
     }
 
     public UserEntity findByUsername (String username) {
@@ -116,7 +116,7 @@ public class UserService {
         return user;
     }
 
-    public void confirmUser (UUID token) {
+    public void verifyUser (UUID token) {
         var user = userRepository.findByValidationToken(token)
                 .orElseThrow(() -> new RuntimeException("User not found."));
         if (user.getStatus().equals(UserStatus.VERIFIED)) {

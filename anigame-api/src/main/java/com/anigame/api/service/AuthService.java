@@ -83,8 +83,8 @@ public class AuthService {
         return user;
     }
 
-    public void validateAccount (UUID token) {
-        userService.confirmUser(token);
+    public void verifyUser (UUID token) {
+        userService.verifyUser(token);
     }
 
     public void resendVerificationToken (String email) {
