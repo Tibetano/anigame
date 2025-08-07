@@ -1,9 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const apiHost = import.meta.env.VITE_API_HOST;
-const apiPort = import.meta.env.VITE_API_PORT;
-
-
 interface User {
   id: string;
   username: string;
@@ -13,6 +9,7 @@ interface User {
   cpf: string;
   gender: string;
   dateOfBirth: string;
+  status: string;
 }
 
 interface AuthContextType {
@@ -71,6 +68,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (username: string, password: string, redirectTo?: string): Promise<boolean> => {
     try {
       setIsLoading(true);
+      const apiHost = import.meta.env.VITE_API_HOST || 'localhost';
+      const apiPort = import.meta.env.VITE_API_PORT || '8080';
       const response = await fetch(`http://${apiHost}:${apiPort}/auth/login`, {
         method: 'POST',
         headers: {
@@ -118,6 +117,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (userData: RegisterData): Promise<User | false> => {
     try {
       setIsLoading(true);
+      const apiHost = import.meta.env.VITE_API_HOST || 'localhost';
+      const apiPort = import.meta.env.VITE_API_PORT || '8080';
       const response = await fetch(`http://${apiHost}:${apiPort}/auth/register`, {
         method: 'POST',
         headers: {
@@ -144,6 +145,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     try {
       setIsLoading(true);
+      const apiHost = import.meta.env.VITE_API_HOST || 'localhost';
+      const apiPort = import.meta.env.VITE_API_PORT || '8080';
       const response = await fetch(`http://${apiHost}:${apiPort}/auth/profile`, {
         method: 'PUT',
         headers: {

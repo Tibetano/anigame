@@ -130,7 +130,7 @@ const Login = () => {
             <p className="text-sm text-muted-foreground">
               Não tem uma conta?{' '}
               <Link 
-                to="/registro" 
+                to="/register" 
                 className="text-primary hover:text-primary/80 font-semibold"
               >
                 Cadastre-se aqui

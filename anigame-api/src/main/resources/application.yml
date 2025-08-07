@@ -2,26 +2,24 @@ server:
   port: 8080
 
 spring:
+  datasource:
+    url: jdbc:postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+  sql:
+    init:
+      mode: always
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: lucas.tibetano@gmail.com
-    password: lrpcalbooydpshul
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIl_USERNAME}
+    password: ${EMAIL_PASSWORD}
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
-
-  datasource:
-    url: jdbc:postgresql://localhost:5432/pg
-    username: postgres
-    password: postgres
-
-  sql:
-    init:
-      mode: always
 
   #jpa:
     #hibernate:
@@ -32,10 +30,11 @@ spring:
     #properties:
     #  hibernate:
     #    format_sql: true
+
 app:
-  url: http://localhost
-  port: 8085
-  verify-endpoint: /auth/verify-user
+  url: ${FRONTEND_URL}
+  port: ${FRONTEND_PORT}
+  verify-endpoint: ${FRONTEND_VERRIFY_ENDPOINT}
 
 jwt:
   public:

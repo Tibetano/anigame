@@ -121,29 +121,25 @@ const Register = () => {
     });
     
     if (success) {
-      toast({
-        title: `Usuário ${success.firstName} registrado com sucesso!`,
-        description: (
-          <div className="space-y-2">
-            <p><strong>ID:</strong> {success.id}</p>
-            <p><strong>Username:</strong> {success.username}</p>
-            <p><strong>Nome:</strong> {success.firstName} {success.lastName}</p>
-            <p><strong>Email:</strong> {success.email}</p>
-            <p><strong>CPF:</strong> {success.cpf}</p>
-            <p><strong>Gênero:</strong> {translateGender(success.gender)}</p>
-            <p><strong>Data de Nascimento:</strong> {success.dateOfBirth}</p>
-          </div>
-        ),
-        action: (
-          <Button onClick={() => navigate('/login')} variant="outline" size="sm">
-            Ok
-          </Button>
-        ),
+      // Redirecionar para página de sucesso com os dados do usuário (sem ID)
+      navigate('/register-success', {
+        state: {
+          userData: {
+            username: success.username,
+            firstName: success.firstName,
+            lastName: success.lastName,
+            email: success.email,
+            cpf: success.cpf,
+            gender: success.gender,
+            dateOfBirth: success.dateOfBirth,
+            status: success.status
+          }
+        }
       });
     } else {
       toast({
         title: "Erro no cadastro",
-        description: "Tente novamente ou use dados diferentes",
+        description: "Ocorreu um erro ao criar sua conta. Verifique os dados e tente novamente.",
         variant: "destructive",
       });
     }

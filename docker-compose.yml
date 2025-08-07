@@ -28,6 +28,18 @@ services:
       DATABASE_USER: postgres
       DATABASE_PASSWORD: postgres
       DATABASE_NAME: pg
+
+      FRONTEND_URL: http://localhost
+      FRONTEND_PORT: 8085
+      FRONTEND_VERRIFY_ENDPOINT: /auth/verify-user
+
+      EMAIL_HOST: smtp.gmail.com
+      EMAIL_PORT: 587
+      EMAIl_USERNAME: lucas.tibetano@gmail.com
+      EMAIL_PASSWORD: lrpcalbooydpshul
+
+
+
     depends_on:
       postgres:
         condition: service_healthy

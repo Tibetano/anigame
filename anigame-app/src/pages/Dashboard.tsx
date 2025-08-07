@@ -7,13 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { User, Ticket, Edit, Save, Loader } from 'lucide-react';
+import { User, Ticket, Edit, Save, Loader, Mail } from 'lucide-react';
 import Header from '@/components/Header';
 
 const Dashboard = () => {
-  const { user, updateUser, isLoading } = useAuth();
+  const { user, updateUser, isLoading, token } = useAuth();
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
+  const [isResendingVerification, setIsResendingVerification] = useState(false);
   const [formData, setFormData] = useState({
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
@@ -61,6 +62,47 @@ const Dashboard = () => {
     }));
   };
 
+  const handleResendVerification = async () => {
+    if (!user?.email || !token) return;
+    
+    try {
+      setIsResendingVerification(true);
+      const apiHost = import.meta.env.VITE_API_HOST || 'localhost';
+      const apiPort = import.meta.env.VITE_API_PORT || '8080';
+      
+      const response = await fetch(`http://${apiHost}:${apiPort}/auth/resend-verification`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ email: user.email }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Email de verificação enviado!",
+          description: `Um email de verificação foi enviado para ${user.email}`,
+        });
+      } else {
+        toast({
+          title: "Erro ao enviar email",
+          description: "Tente novamente mais tarde",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao reenviar verificação:', error);
+      toast({
+        title: "Erro ao enviar email",
+        description: "Tente novamente mais tarde",
+        variant: "destructive",
+      });
+    } finally {
+      setIsResendingVerification(false);
+    }
+  };
+
   const mockTickets = [
     {
       id: '1',
@@ -82,9 +124,36 @@ const Dashboard = () => {
             <h1 className="text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
               Dashboard
             </h1>
-            <p className="text-muted-foreground text-lg">
-              Bem-vindo, {user.firstName} {user.lastName}!
-            </p>
+            <div className="flex items-center gap-4">
+              <p className="text-muted-foreground text-lg">
+                Bem-vindo, {user.firstName}!
+              </p>
+              <div className="flex items-center gap-2">
+                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                  user.status === 'VERIFIED' 
+                    ? 'bg-green-500/20 text-green-400' 
+                    : 'bg-orange-500/20 text-orange-400'
+                }`}>
+                  {user.status === 'VERIFIED' ? 'Verificada' : 'Pendente'}
+                </span>
+                {user.status === 'PENDING' && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleResendVerification}
+                    disabled={isResendingVerification}
+                    className="h-7 px-2"
+                  >
+                    {isResendingVerification ? (
+                      <Loader className="h-3 w-3 mr-1 animate-spin" />
+                    ) : (
+                      <Mail className="h-3 w-3 mr-1" />
+                    )}
+                    {isResendingVerification ? 'Enviando...' : 'Verificar'}
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
 
           <Tabs defaultValue="profile" className="space-y-6">
@@ -257,7 +326,7 @@ const Dashboard = () => {
                       <p className="text-muted-foreground mb-6">
                         Você ainda não possui ingressos para o AniGame
                       </p>
-                      <Button variant="neon" onClick={() => window.location.href = '/ingressos'}>
+                      <Button variant="neon" onClick={() => window.location.href = '/tickets'}>
                         Comprar Ingresso
                       </Button>
                     </CardContent>

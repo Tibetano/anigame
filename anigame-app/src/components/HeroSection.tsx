@@ -52,7 +52,7 @@ const HeroSection = () => {
             <Button 
               variant="neon" 
               size="lg"
-              onClick={() => navigate('/ingressos')}
+              onClick={() => navigate('/tickets')}
               className="text-lg px-8 py-3"
             >
               Comprar Ingresso
@@ -60,7 +60,7 @@ const HeroSection = () => {
             <Button 
               variant="cyber" 
               size="lg"
-              onClick={() => navigate('/programacao')}
+              onClick={() => navigate('/schedule')}
               className="text-lg px-8 py-3"
             >
               Ver Programação

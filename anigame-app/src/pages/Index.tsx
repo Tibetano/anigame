@@ -113,10 +113,10 @@ const Index = () => {
             Garante já seu ingresso!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="neon" size="lg" onClick={() => window.location.href = '/ingressos'}>
+            <Button variant="neon" size="lg" onClick={() => window.location.href = '/tickets'}>
               Comprar Ingresso Agora
             </Button>
-            <Button variant="cyber" size="lg" onClick={() => window.location.href = '/programacao'}>
+            <Button variant="cyber" size="lg" onClick={() => window.location.href = '/schedule'}>
               Ver Programação Completa
             </Button>
           </div>

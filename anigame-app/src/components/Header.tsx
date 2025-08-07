@@ -25,10 +25,10 @@ const Header = () => {
 
   const navigation = [
     { name: 'Início', href: '/' },
-    { name: 'Ingressos', href: '/ingressos' },
-    { name: 'Programação', href: '/programacao' },
-    { name: 'Patrocinadores', href: '/patrocinadores' },
-    { name: 'Contato', href: '/contato' },
+    { name: 'Ingressos', href: '/tickets' },
+    { name: 'Programação', href: '/schedule' },
+    { name: 'Patrocinadores', href: '/sponsors' },
+    { name: 'Contato', href: '/contact' },
   ];
 
   return (
@@ -78,7 +78,7 @@ const Header = () => {
                 <Button variant="ghost" onClick={handleLoginClick}>
                   Entrar
                 </Button>
-                <Button variant="neon" onClick={() => navigate('/registro')}>
+                <Button variant="neon" onClick={() => navigate('/register')}>
                   Cadastrar-se
                 </Button>
               </div>
@@ -143,7 +143,7 @@ const Header = () => {
                       <Button
                         variant="neon"
                         onClick={() => {
-                          navigate('/registro');
+                          navigate('/register');
                           setIsOpen(false);
                         }}
                         className="w-full justify-start"
