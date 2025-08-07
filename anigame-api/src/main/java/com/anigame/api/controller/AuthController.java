@@ -1,9 +1,6 @@
 package com.anigame.api.controller;
 
-import com.anigame.api.dto.RefreshTokenReqDTO;
-import com.anigame.api.dto.ResendVerificationReqDTO;
-import com.anigame.api.dto.UserCredentialsReqDTO;
-import com.anigame.api.dto.UserReqDTO;
+import com.anigame.api.dto.*;
 import com.anigame.api.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,8 +49,8 @@ public class AuthController {
     }
 
     @PostMapping("/verify-user")
-    public ResponseEntity<?> verifyUser (@RequestParam(value = "token") String validationToken) {
-        authService.verifyUser(UUID.fromString(validationToken));
+    public ResponseEntity<?> verifyUser (@RequestBody VerificationTokenReqDTO token) {
+        authService.verifyUser(UUID.fromString(token.token()));
         return ResponseEntity.ok("User verified successfully.");
     }
 
