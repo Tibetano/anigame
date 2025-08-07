@@ -119,20 +119,20 @@ public class UserService {
     public void confirmUser (UUID token) {
         var user = userRepository.findByValidationToken(token)
                 .orElseThrow(() -> new RuntimeException("User not found."));
-        if (user.getStatus().equals(UserStatus.CONFIRMED)) {
-            throw new RuntimeException("User already verificated.");
+        if (user.getStatus().equals(UserStatus.VERIFIED)) {
+            throw new RuntimeException("User already verified.");
         } else if (Instant.now().isAfter(user.getValidationTokenExpirationDate())) {
             throw new RuntimeException("Expired validation token expiration date.");
         }
-        user.setStatus(UserStatus.CONFIRMED);
+        user.setStatus(UserStatus.VERIFIED);
         userRepository.save(user);
     }
 
     public UserEntity refreshValidationToken (String email) {
         var user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found."));
-        if (user.getStatus().equals(UserStatus.CONFIRMED)) {
-            throw new RuntimeException("User already verificated.");
+        if (user.getStatus().equals(UserStatus.VERIFIED)) {
+            throw new RuntimeException("User already verified.");
         } else if (Instant.now().isBefore(user.getValidationTokenExpirationDate())){
             return user;
         }
