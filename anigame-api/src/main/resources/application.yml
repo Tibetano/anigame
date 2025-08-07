@@ -35,7 +35,7 @@ spring:
 app:
   url: http://localhost
   port: 8085
-  verify-endpoint: /auth/verify-email
+  verify-endpoint: /auth/verify-user
 
 jwt:
   public:

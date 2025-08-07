@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/auth/login",
                                                                   "/auth/refresh",
                                                                   "/auth/register",
-                                                                  "/auth/verify-email",
+                                                                  "/auth/verify-user",
                                                                   "/auth/resend-verification").permitAll()
                         .anyRequest().authenticated())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Define a origem do CORS
