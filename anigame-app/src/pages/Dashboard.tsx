@@ -33,9 +33,6 @@ const Dashboard = () => {
     return translations[gender as keyof typeof translations] || gender;
   };
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
 
   const handleSave = async () => {
     const success = await updateUser(formData);

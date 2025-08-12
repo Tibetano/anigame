@@ -55,14 +55,44 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('anigame_token');
-    const storedUser = localStorage.getItem('anigame_user');
-    
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
+    const validateStoredAuth = async () => {
+      const storedToken = localStorage.getItem('anigame_token');
+      const storedUser = localStorage.getItem('anigame_user');
+      
+      if (storedToken && storedUser) {
+        try {
+          // Validate token by fetching user profile
+          const apiHost = import.meta.env.VITE_API_HOST || 'localhost';
+          const apiPort = import.meta.env.VITE_API_PORT || '8080';
+          const response = await fetch(`http://${apiHost}:${apiPort}/auth/profile`, {
+            headers: {
+              'Authorization': `Bearer ${storedToken}`,
+            },
+          });
+
+          if (response.ok) {
+            const userData = await response.json();
+            setToken(storedToken);
+            setUser(userData);
+            localStorage.setItem('anigame_user', JSON.stringify(userData));
+          } else {
+            // Token is invalid or expired, clear storage
+            localStorage.removeItem('anigame_token');
+            localStorage.removeItem('anigame_user');
+            localStorage.removeItem('anigame_refresh_token');
+          }
+        } catch (error) {
+          console.error('Erro ao validar token:', error);
+          // Clear invalid tokens
+          localStorage.removeItem('anigame_token');
+          localStorage.removeItem('anigame_user');
+          localStorage.removeItem('anigame_refresh_token');
+        }
+      }
+      setIsLoading(false);
+    };
+
+    validateStoredAuth();
   }, []);
 
   const login = async (username: string, password: string, redirectTo?: string): Promise<boolean> => {

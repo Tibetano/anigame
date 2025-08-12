@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,29 +14,29 @@ const Login = () => {
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Redirect if already logged in
+  if (user) {
+    const redirectTo = location.state?.from?.pathname || '/dashboard';
+    return <Navigate to={redirectTo} replace />;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const success = await login(formData.username, formData.password);
+    const redirectTo = location.state?.from?.pathname || '/dashboard';
+    const success = await login(formData.username, formData.password, redirectTo);
     
     if (success) {
       toast({
         title: "Login realizado com sucesso!",
         description: "Bem-vindo ao AniGame",
       });
-      
-      // Check for redirect URL
-      const redirectTo = localStorage.getItem('anigame_redirect');
-      if (redirectTo) {
-        localStorage.removeItem('anigame_redirect');
-        navigate(redirectTo);
-      } else {
-        navigate('/dashboard');
-      }
+      // Navigation will be handled by the Navigate component above after login
     } else {
       toast({
         title: "Erro no login",

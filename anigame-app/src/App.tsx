@@ -15,6 +15,7 @@ import Sponsors from "./pages/Sponsors";
 import Schedule from "./pages/Schedule";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -31,8 +32,8 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             <Route path="/register-success" element={<RegisterSuccess />} />
             <Route path="/auth/verify-user" element={<VerifyUser />} />
-            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/tickets" element={<Tickets />} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/sponsors" element={<Sponsors />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/contact" element={<Contact />} />
