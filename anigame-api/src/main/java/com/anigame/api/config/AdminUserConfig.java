@@ -64,6 +64,9 @@ public class AdminUserConfig implements CommandLineRunner {
                     user.setCreatedAt(Instant.now());
                     user.setUpdatedAt(Instant.now());
 
+                    user.setNewPasswordToken(UUID.randomUUID());
+                    user.setNewPasswordTokenExpirationDate(Instant.now());
+
                     userRepository.save(user);
                 }
         );

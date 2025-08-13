@@ -1,9 +1,6 @@
 package com.anigame.api.service;
 
-import com.anigame.api.dto.UserCredentialsReqDTO;
-import com.anigame.api.dto.UserCredentialsResDTO;
-import com.anigame.api.dto.UserReqDTO;
-import com.anigame.api.dto.UserResDTO;
+import com.anigame.api.dto.*;
 import com.anigame.api.persistence.entity.UserEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,8 +24,10 @@ public class AuthService {
     private String appURL;
     @Value("${app.port}")
     private String appPORT;
-    @Value("${app.verify-endpoint}")
-    private String appENDPOINT;
+    @Value("${app.verify-email-endpoint}")
+    private String appVERIFYEMAILENDPOINT;
+    @Value("${app.new-password-endpoint}")
+    private String appNEWPASSWORDENDPOINT;
 
     private final UserService userService;
     private final EmailService mailService;
@@ -78,7 +77,7 @@ public class AuthService {
     public UserResDTO register (UserReqDTO userReqDTO) {
         var user = userService.create(userReqDTO);
         String message = "Usuário(a) criado(a) com sucesso! As contas devem ser verificadas. Para verificar sua conta acesso o link: " +
-                appURL + ":" + appPORT + appENDPOINT + "?token=" + user.validationToken().toString();
+                appURL + ":" + appPORT + appVERIFYEMAILENDPOINT + "?token=" + user.validationToken().toString();
         mailService.sendTextEmail(user.email(),"abertura de conta", message);
         return user;
     }
@@ -90,7 +89,34 @@ public class AuthService {
     public void resendVerificationToken (String email) {
         var user = userService.refreshValidationToken(email);
         String message = "Olá! Segue o novo link para verificação da sua conta: " +
-                appURL + ":" + appPORT + appENDPOINT + "?token=" + user.getValidationToken().toString();
+                appURL + ":" + appPORT + appVERIFYEMAILENDPOINT + "?token=" + user.getValidationToken().toString();
         mailService.sendTextEmail(user.getEmail(),"abertura de conta", message);
+    }
+
+
+
+
+
+
+
+
+    public void resetPassword (NLNewPasswordReqDTO data) {
+        var user = userService.resetPassword(data);
+        String message = "Sua senha foi alterada com sucesso!";
+        mailService.sendTextEmail(user.getEmail(),"Alteração de senha", message);
+    }
+
+    public void forgotPassword (String email) {
+        var user = userService.generateNewPasswordToken(email);
+        String message = "Olá! Segue o novo link para o cadastro de uma nova senha: " +
+                appURL + ":" + appPORT + appNEWPASSWORDENDPOINT + "?token=" + user.getNewPasswordToken().toString() +
+                "&email=" + user.getEmail();
+        mailService.sendTextEmail(user.getEmail(),"Recuperação de acesso de conta", message);
+    }
+
+    public void lResetPassword (LNewPasswordReqDTO data, String accessToken) {
+        var user = userService.lResetPassword(data, tokenService.getUserIdFromToken(accessToken));
+        String message = "Sua senha foi alterada com sucesso!";
+        mailService.sendTextEmail(user.getEmail(),"Alteração de senha", message);
     }
 }

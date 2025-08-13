@@ -1,6 +1,6 @@
 package com.anigame.api.dto;
 
-public record ResendVerificationReqDTO(
+public record EmailReqDTO(
         String email
 ) {
 }

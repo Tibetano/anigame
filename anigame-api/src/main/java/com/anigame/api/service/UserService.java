@@ -1,5 +1,7 @@
 package com.anigame.api.service;
 
+import com.anigame.api.dto.LNewPasswordReqDTO;
+import com.anigame.api.dto.NLNewPasswordReqDTO;
 import com.anigame.api.dto.UserReqDTO;
 import com.anigame.api.dto.UserResDTO;
 import com.anigame.api.persistence.entity.UserEntity;
@@ -55,6 +57,9 @@ public class UserService {
                 .validationTokenExpirationDate(Instant.now().plus(24, ChronoUnit.HOURS))
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
+
+                .newPasswordToken(UUID.randomUUID())
+                .newPasswordTokenExpirationDate(Instant.now().plus(1, ChronoUnit.MINUTES))
 
                 .roles(Set.of(userRole.get()))
                 .build();
@@ -141,4 +146,33 @@ public class UserService {
         return userRepository.save(user);
     }
 
+
+
+
+
+
+    public UserEntity generateNewPasswordToken (String email) {
+        var user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found."));
+        user.setNewPasswordToken(UUID.randomUUID());
+        user.setNewPasswordTokenExpirationDate(Instant.now().plus(1, ChronoUnit.MINUTES));
+        return userRepository.save(user);
+    }
+
+    public UserEntity resetPassword (NLNewPasswordReqDTO data) {
+        var user = userRepository.findByEmail(data.email())
+                .orElseThrow(() -> new RuntimeException("User not found."));
+        user.setPassword(bCryptPasswordEncoder.encode(data.password()));
+        return userRepository.save(user);
+    }
+
+    public UserEntity lResetPassword (LNewPasswordReqDTO data, UUID userId) {
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found."));
+        if (!bCryptPasswordEncoder.matches(data.currentPassword(),user.getPassword())) {
+            throw new RuntimeException("Invalid current password.");
+        }
+        user.setPassword(bCryptPasswordEncoder.encode(data.newPassword()));
+        return userRepository.save(user);
+    }
 }

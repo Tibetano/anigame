@@ -55,9 +55,33 @@ public class AuthController {
     }
 
     @PostMapping("/resend-verification")
-    public ResponseEntity<?> resendVerification (@RequestBody ResendVerificationReqDTO req) {
+    public ResponseEntity<?> resendVerification (@RequestBody EmailReqDTO req) {
         authService.resendVerificationToken(req.email());
         return ResponseEntity.ok("New validation link sent successfully.");
+    }
+
+
+
+
+
+
+
+    @PostMapping("/nl-reset-password")
+    public ResponseEntity<?> resetPassword (@RequestBody NLNewPasswordReqDTO req) {
+        authService.resetPassword(req);
+        return ResponseEntity.ok("Password reseted successfully.");
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword (@RequestBody EmailReqDTO req) {
+        authService.forgotPassword(req.email());
+        return ResponseEntity.ok("New validation link sent successfully.");
+    }
+
+    @PostMapping("/l-reset-password")
+    public ResponseEntity<?> lResetPassword (@RequestBody LNewPasswordReqDTO req, @RequestHeader("Authorization") String authorizationHeader) {
+        authService.lResetPassword(req, authorizationHeader.replace("Bearer ",""));
+        return ResponseEntity.ok("Password reseted successfully.");
     }
 
 }

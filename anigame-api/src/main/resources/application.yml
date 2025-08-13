@@ -12,8 +12,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: lucas.tibetano@gmail.com
-    password: lrpcalbooydpshul
+    username: anigame.staff@gmail.com
+    password: rlejhptrghlsbgde
     properties:
       mail:
         smtp:
@@ -33,7 +33,8 @@ spring:
 app:
   url: http://localhost
   port: 8085
-  verify-endpoint: /auth/verify-user
+  verify-email-endpoint: /auth/verify-user
+  new-password-endpoint: /auth/new-password
 
 jwt:
   public:

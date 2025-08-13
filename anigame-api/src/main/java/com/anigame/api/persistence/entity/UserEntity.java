@@ -55,6 +55,11 @@ public class UserEntity {
     @Column(nullable = false)
     private Instant updatedAt;
 
+    @Column(unique = true, nullable = false)
+    private UUID newPasswordToken;
+    @Column(nullable = false)
+    private Instant newPasswordTokenExpirationDate;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "tb_users_roles",
