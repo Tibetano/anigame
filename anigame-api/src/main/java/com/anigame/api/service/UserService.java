@@ -110,7 +110,7 @@ public class UserService {
     public UserEntity findByUsername (String username) {
         var user = userRepository.findByUsername(username);
         if (user.isEmpty()) {
-            throw new BadCredentialsException("Invalid user or password!");
+            throw new BadCredentialsException("Invalid username or password!");
         }
         return user.get();
     }
