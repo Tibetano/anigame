@@ -119,4 +119,20 @@ public class AuthService {
         String message = "Sua senha foi alterada com sucesso!";
         mailService.sendTextEmail(user.getEmail(),"Alteração de senha", message);
     }
+
+
+
+    public void lResetEmail (LNewEmailReqDTO data, String accessToken) {
+        var user = userService.lResetEmail(data, tokenService.getUserIdFromToken(accessToken));
+        String message = "Seu email foi alterado com sucesso!";
+        mailService.sendTextEmail(user.getEmail(),"Alteração de email", message);
+    }
+
+    public UserProfileResDTO updateUser (UserDataReqDTO data, String accessToken) {
+        var user = userService.updateUser(data, tokenService.getUserIdFromToken(accessToken));
+        String message = "Suas informações pessoais foram alteradas com sucesso!";
+        mailService.sendTextEmail(user.email(),"Alteração de dados cadastrais", message);
+        return user;
+    }
+
 }

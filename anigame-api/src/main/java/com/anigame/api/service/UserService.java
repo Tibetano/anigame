@@ -1,15 +1,13 @@
 package com.anigame.api.service;
 
-import com.anigame.api.dto.LNewPasswordReqDTO;
-import com.anigame.api.dto.NLNewPasswordReqDTO;
-import com.anigame.api.dto.UserReqDTO;
-import com.anigame.api.dto.UserResDTO;
+import com.anigame.api.dto.*;
 import com.anigame.api.persistence.entity.UserEntity;
 import com.anigame.api.persistence.entity.enumerate.UserGender;
 import com.anigame.api.persistence.entity.RoleEntity;
 import com.anigame.api.persistence.entity.enumerate.UserStatus;
 import com.anigame.api.persistence.repository.RoleRepository;
 import com.anigame.api.persistence.repository.UserRepository;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Set;
 import java.util.UUID;
@@ -174,5 +173,44 @@ public class UserService {
         }
         user.setPassword(bCryptPasswordEncoder.encode(data.newPassword()));
         return userRepository.save(user);
+    }
+
+
+
+
+    public UserEntity lResetEmail (LNewEmailReqDTO data, UUID userId) {
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found."));
+        if (!bCryptPasswordEncoder.matches(data.password(),user.getPassword())) {
+            throw new RuntimeException("Invalid current password.");
+        }
+        user.setEmail(data.newEmail());
+        return userRepository.save(user);
+    }
+
+
+
+
+    public UserProfileResDTO updateUser (UserDataReqDTO data, UUID userId) {
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found."));
+
+        user.setFirstName(data.firstName() != null ? data.firstName() : user.getFirstName());
+        user.setLastName(data.lastName() != null ? data.lastName() : user.getLastName());
+        user.setGender(data.gender() != null ? UserGender.valueOf(data.gender()) : user.getGender());
+
+        var updatedUser = userRepository.save(user);
+        UserProfileResDTO userReturn = UserProfileResDTO.builder()
+                .username(updatedUser.getUsername())
+                .firstName(updatedUser.getFirstName())
+                .lastName(updatedUser.getLastName())
+                .cpf(updatedUser.getCpf())
+                .email(updatedUser.getEmail())
+                .gender(updatedUser.getGender())
+                .dateOfBirth(updatedUser.getDateOfBirth())
+                .status(updatedUser.getStatus())
+                .createdAt(updatedUser.getCreatedAt())
+                .build();
+        return userReturn;
     }
 }

@@ -42,7 +42,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST,"/u").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/u", "/u/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/u",
+                                                                 "/u/{id}",
+                                                                 "/sponsorships/current").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login",
                                                             "/auth/refresh",
                                                             "/auth/register",
@@ -64,7 +66,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of("*")); // Origem do frontend
-        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         //config.setAllowCredentials(true); // Se for necessário enviar cookies/headers de auth
 

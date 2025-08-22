@@ -84,4 +84,21 @@ public class AuthController {
         return ResponseEntity.ok("Password reseted successfully.");
     }
 
+
+
+
+
+
+
+    @PostMapping("/l-reset-email")
+    public ResponseEntity<?> lResetEmail (@RequestBody LNewEmailReqDTO req, @RequestHeader("Authorization") String authorizationHeader) {
+        authService.lResetEmail(req, authorizationHeader.replace("Bearer ",""));
+        return ResponseEntity.ok("Email reseted successfully.");
+    }
+
+    @PatchMapping("/profile")
+    public ResponseEntity<?> updateUser (@RequestBody UserDataReqDTO req, @RequestHeader("Authorization") String authorizationHeader) {
+        return ResponseEntity.ok(authService.updateUser(req, authorizationHeader.replace("Bearer ","")));
+    }
+
 }
