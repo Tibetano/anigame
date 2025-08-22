@@ -22,7 +22,7 @@ public class EventEntity {
     @Column(name = "event_id", columnDefinition = "uuid DEFAULT gen_random_uuid()", updatable = false, nullable = false)
     private UUID id;
     @Column(unique = true, nullable = false)
-    private Integer version;
+    private Integer season;
     @Column(nullable = false)
     private String city;
     @Column(nullable = false)
